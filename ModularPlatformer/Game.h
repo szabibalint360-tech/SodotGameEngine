@@ -31,11 +31,15 @@ public:
 };
 class MainScene:public Scene {
 public:
+	CameraNode MyCamera;
     Player MyPlayer;
     Box Box1;
     Box Box2;
 
     MainScene() {//Setup
+        MyCamera.setTarget(&MyPlayer);
+        addChild(&MyCamera);
+        camera = &MyCamera;
         MyPlayer.position = { 640.0f,360.0f };
         Box1.mode = KINEMATIC;
         Box2.mode = STATIC;

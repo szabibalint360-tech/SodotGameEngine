@@ -1,8 +1,42 @@
 #pragma once
 #include "Bodies.h"
 
+class CameraNode : public Node {
+public:
+    Camera2D camera = { 0 };
+    Node* target = nullptr;
+    Vector2 offset = { windowWidth / 2.0f, windowHeight / 2.0f };
+    float zoom = 1.0f;
+    float rotation = 0.0f;
+
+    CameraNode() {
+        camera.offset = offset;
+        camera.zoom = zoom;
+    }
+
+    void setTarget(Node* node) {
+        target = node;
+    }
+
+    void update(double deltaTime) override {
+        if (target != nullptr) {
+            camera.target = target->position;
+        }
+        camera.offset = offset;
+        camera.zoom = zoom;
+        camera.rotation = rotation;
+        Node::update(deltaTime);
+    }
+
+    void beginDraw() { BeginMode2D(camera); }
+    void endDraw() { EndMode2D(); }
+};
+
+
+
 class Scene :public Node {
 public:
+    CameraNode* camera = nullptr;
     vector <Node*> children;
     vector <Body*> physics_children;
     vector <CollisionShape*> physics_children_colshapes;
@@ -28,10 +62,17 @@ public:
             child->update(deltatime);
         }
     }
+    virtual void drawUI() {} // override this for HUD/labels
+
     virtual void draw() {
+
+        if (camera != nullptr) camera->beginDraw();
+
         for (Node* child : children) {
             child->draw();
         }
+		if (camera != nullptr) camera->endDraw();
+        drawUI();
     }
     void addPhysicsChild(Body* child) {
         if (child == nullptr) return;
