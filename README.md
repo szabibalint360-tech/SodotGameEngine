@@ -1,9 +1,3 @@
-This is a solid foundation for a custom engine! Since your architecture mirrors the **Scene Tree** and **Node-based** inheritance of Godot, I have structured the README to highlight those specific design patterns. This makes it clear to other developers (or future employers) that you aren't just "coding a game," but building a structured framework.
-
-Here is a professional, high-quality `README.md` for your project.
-
----
-
 # C++ Raylib Node Engine
 
 A lightweight, 2D game framework built on top of **Raylib**. This project implements a hierarchical "Node" system designed to manage game objects, physics, and rendering through inheritance and tree-based propagation.
