@@ -137,6 +137,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Setup.h" />
+    <ClInclude Include="Sprite.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Sprites\Idle %2832x32%29.png" />

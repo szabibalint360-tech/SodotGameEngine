@@ -3,6 +3,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <memory>
+#include <algorithm>
+
 using namespace std;
 
 int windowWidth = 1280;

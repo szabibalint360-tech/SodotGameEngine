@@ -1,5 +1,6 @@
 #pragma once
 #include "Bodies.h"
+#include "Sprite.h"
 
 class CameraNode : public Node {
 public:
@@ -37,16 +38,15 @@ public:
 class Scene :public Node {
 public:
     CameraNode* camera = nullptr;
-    vector <Node*> children;
-    vector <Body*> physics_children;
+    vector <Body*> physics_children_;
     vector <CollisionShape*> physics_children_colshapes;
 
     virtual void process(double deltatime) {}//should be defined in a seperate class
 
     void addChild(Node* child) {
         if (child == nullptr) return;
-        child->parent = this;
-        children.push_back(child);
+        child->parent_ = this;
+        children_.push_back(child);
 
         Body* body = dynamic_cast<Body*>(child);
         if (body != nullptr) {
@@ -55,10 +55,10 @@ public:
     }
     virtual void update(double deltatime) {
         process(deltatime);
-        for (auto child : physics_children) {
+        for (auto child : physics_children_) {
             child->moveAndSlide(physics_children_colshapes);
         }
-        for (Node* child : children) {
+        for (Node* child : children_) {
             child->update(deltatime);
         }
     }
@@ -68,7 +68,7 @@ public:
 
         if (camera != nullptr) camera->beginDraw();
 
-        for (Node* child : children) {
+        for (Node* child : children_) {
             child->draw();
         }
 		if (camera != nullptr) camera->endDraw();
@@ -77,7 +77,7 @@ public:
     void addPhysicsChild(Body* child) {
         if (child == nullptr) return;
         if (child->mode == KINEMATIC) {
-            physics_children.push_back(child);
+            physics_children_.push_back(child);
         }
         physics_children_colshapes.push_back(&(child->Hitbox));//for static bodies we only want their collision shapes
     }

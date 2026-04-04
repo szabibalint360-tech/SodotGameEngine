@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Node.h"
 
 enum PhysicsMode
@@ -37,32 +37,28 @@ Vector2 getCollisionNormal(Rectangle first, Rectangle second) {
 
 class CollisionShape : public Node {
 public:
-	Vector2 offset = { 0.0f, 0.0f };
-	Vector2 size = { 32.0f, 32.0f }; // Absolute pixels, not multiplier
+	Vector2 dimention = { 32.0f, 32.0f }; // Absolute pixels, not multiplier
 	bool centered = true;
 
 	void setSize(float width, float height) {
-		size = { width, height };
+		dimention = { width, height };
 	}
 
 	Rectangle getRectangle() {
 		// 1. Start with the parent's global position
-		Vector2 pos = parent->position;
-
-		// 2. Add our local offset
-		pos.x += offset.x;
-		pos.y += offset.y;
+		Vector2 global_pos = getGlobalPositon();
+;
 
 		// 3. If the parent is centered, we need to shift the hitbox 
 		// back so it aligns with the sprite's visuals
 		if (centered) {
-			pos.x -= size.x / 2.0f;
-			pos.y -= size.y / 2.0f;
+			global_pos.x -= dimention.x / 2.0f;
+			global_pos.y -= dimention.y / 2.0f;
 		}
 
-		return { pos.x, pos.y, size.x, size.y };
+		return { global_pos.x, global_pos.y, dimention.x, dimention.y };
 	}
-	void draw() {
+	void draw() override{
 		DrawRectangleRec(getRectangle(), Fade(SKYBLUE, 0.4f));
 	}
 };
@@ -106,41 +102,34 @@ CollisionInfo Body::checkCollision(vector<CollisionShape*>& worldShapes) {
 	return { false, {0, 0}, nullptr }; // No collision found
 }
 void Body::moveAndSlide(vector<CollisionShape*>& worldShapes) {
-	grounded = false; // Reset grounded status at start of move
+    grounded = false;
 
-	 // Ensure hitbox follows the body
-	// --- X AXIS ---
-	position.x += velocity.x;
-	Hitbox.position = position;
+    // --- X AXIS ---
+    position.x += velocity.x;
+    // DELETE: Hitbox.position = position;  ← remove this
 
-	CollisionInfo hitX = checkCollision(worldShapes);
-	if (hitX.happened) {
-		Rectangle other = hitX.shape->getRectangle();
-		Rectangle mine = Hitbox.getRectangle();
+    CollisionInfo hitX = checkCollision(worldShapes);
+    if (hitX.happened) {
+        Rectangle other = hitX.shape->getRectangle();
+        Rectangle mine = Hitbox.getRectangle();
+        float overlapX = (mine.width / 2 + other.width / 2) 
+                       - fabsf((mine.x + mine.width/2) - (other.x + other.width/2));
+        position.x += overlapX * hitX.normal.x;
+        velocity.x = 0.0f;
+    }
 
-		// Calculate how much we overlapped on X
-		float overlapX = (mine.width / 2 + other.width / 2) - fabsf((mine.x + mine.width / 2) - (other.x + other.width / 2));
+    // --- Y AXIS ---
+    position.y += velocity.y;
+    // DELETE: Hitbox.position = position;  ← remove this
 
-		// Push back by exactly the overlap amount in the direction of the normal
-		position.x += overlapX * hitX.normal.x;
-		Hitbox.position.x = position.x;
-		velocity.x = 0.0f;
-	}
-
-	// --- Y AXIS ---
-	position.y += velocity.y;
-	Hitbox.position = position;
-
-	CollisionInfo hitY = checkCollision(worldShapes);
-	if (hitY.happened) {
-		Rectangle other = hitY.shape->getRectangle();
-		Rectangle mine = Hitbox.getRectangle();
-
-		float overlapY = (mine.height / 2 + other.height / 2) - fabsf((mine.y + mine.height / 2) - (other.y + other.height / 2));
-
-		position.y += overlapY * hitY.normal.y;
-		Hitbox.position.y = position.y;
-		if (hitY.normal.y < 0) grounded = true; // Normal -1 means floor pushed us UP
-		velocity.y = 0.0f;
-	}
+    CollisionInfo hitY = checkCollision(worldShapes);
+    if (hitY.happened) {
+        Rectangle other = hitY.shape->getRectangle();
+        Rectangle mine = Hitbox.getRectangle();
+        float overlapY = (mine.height / 2 + other.height / 2) 
+                       - fabsf((mine.y + mine.height/2) - (other.y + other.height/2));
+        position.y += overlapY * hitY.normal.y;
+        if (hitY.normal.y < 0) grounded = true;
+        velocity.y = 0.0f;
+    }
 }

@@ -9,6 +9,7 @@ public:
     Player() {
         mode = KINEMATIC;
         PlayerSprite.size = { 3.0f,3.0f };
+
         addChild(&PlayerSprite);
         Hitbox.setSize(96.0f, 96.0f);
     }
