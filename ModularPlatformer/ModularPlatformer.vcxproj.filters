@@ -20,22 +20,28 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Node.h">
+    <ClInclude Include="Architecture\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Setup.h">
+    <ClInclude Include="Architecture\Setup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bodies.h">
+    <ClInclude Include="Architecture\Bodies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="Architecture\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="Architecture\Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Architecture\UserInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Architecture\Area.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

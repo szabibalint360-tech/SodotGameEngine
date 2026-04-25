@@ -17,7 +17,7 @@ public:
 		UnloadTexture(texture);
 	}
 	Vector2 getOrigin() {
-		if (centered) {
+		if constexpr (Engine::CENTER_SPRITES) {
 			return Vector2{ (resolution.x * size.x) / 2.0f, (resolution.y * size.y) / 2.0f };
 		}
 		return Vector2{ 0.0f, 0.0f };

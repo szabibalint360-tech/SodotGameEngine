@@ -1,6 +1,8 @@
 #pragma once
+#include "Area.h"
 #include "Bodies.h"
 #include "Sprite.h"
+#include "UserInterface.h"
 
 class CameraNode : public Node {
 public:
@@ -40,29 +42,45 @@ public:
     CameraNode* camera = nullptr;
     vector <Body*> physics_children_;
     vector <CollisionShape*> physics_children_colshapes;
+    vector <Control*> ui_children;// Elements that stay fixed on screen
+    DebugOverlay Debugger;
 
-    virtual void process(double deltatime) {}//should be defined in a seperate class
+    virtual void process(double deltaTime) {}//should be defined in a seperate class
 
     void addChild(Node* child) {
         if (child == nullptr) return;
         child->parent_ = this;
-        children_.push_back(child);
+        if (auto control = dynamic_cast<Control*>(child)) {
+            ui_children.push_back(control); return;
+        }
 
-        Body* body = dynamic_cast<Body*>(child);
-        if (body != nullptr) {
+        children_.push_back(child);//no Control Nodes
+
+        if (auto body = dynamic_cast<Body*>(child)) {
             addPhysicsChild(body);
         }
     }
-    virtual void update(double deltatime) {
-        process(deltatime);
+    virtual void update(double deltaTime) {
+        process(deltaTime);
         for (auto child : physics_children_) {
             child->moveAndSlide(physics_children_colshapes);
         }
         for (Node* child : children_) {
-            child->update(deltatime);
+            child->update(deltaTime);
+        }
+        updateUI(deltaTime);
+    }
+    virtual void updateUI(double deltaTime) {
+        for (Control* child : ui_children) {
+            child->update(deltaTime);
         }
     }
-    virtual void drawUI() {} // override this for HUD/labels
+    virtual void drawUI() {
+        Debugger.draw();
+        for (Control* child : ui_children) {
+            child->draw();
+        }
+    } // override this for HUD/labels
 
     virtual void draw() {
 

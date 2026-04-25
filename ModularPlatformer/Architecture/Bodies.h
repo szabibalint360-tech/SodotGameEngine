@@ -49,9 +49,9 @@ public:
 		Vector2 global_pos = getGlobalPositon();
 ;
 
-		// 3. If the parent is centered, we need to shift the hitbox 
+		// If is centered, we need to shift the hitbox 
 		// back so it aligns with the sprite's visuals
-		if (centered) {
+		if constexpr (Engine::CENTER_AREAS) {
 			global_pos.x -= dimention.x / 2.0f;
 			global_pos.y -= dimention.y / 2.0f;
 		}
@@ -59,7 +59,10 @@ public:
 		return { global_pos.x, global_pos.y, dimention.x, dimention.y };
 	}
 	void draw() override{
-		DrawRectangleRec(getRectangle(), Fade(SKYBLUE, 0.4f));
+		// If BUILD_DEBUG_TOOLS is false, the line below is literally deleted by the compiler.
+		if constexpr (Engine::BUILD_DEBUG_TOOLS) {
+			DrawRectangleRec(getRectangle(), Fade(SKYBLUE, 0.4f));
+		}
 	}
 };
 struct CollisionInfo {
@@ -106,7 +109,7 @@ void Body::moveAndSlide(vector<CollisionShape*>& worldShapes) {
 
     // --- X AXIS ---
     position.x += velocity.x;
-    // DELETE: Hitbox.position = position;  ← remove this
+    // DELETE: Hitbox.position = position;
 
     CollisionInfo hitX = checkCollision(worldShapes);
     if (hitX.happened) {
@@ -120,7 +123,7 @@ void Body::moveAndSlide(vector<CollisionShape*>& worldShapes) {
 
     // --- Y AXIS ---
     position.y += velocity.y;
-    // DELETE: Hitbox.position = position;  ← remove this
+    // DELETE: Hitbox.position = position;
 
     CollisionInfo hitY = checkCollision(worldShapes);
     if (hitY.happened) {

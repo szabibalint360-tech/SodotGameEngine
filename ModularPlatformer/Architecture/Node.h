@@ -1,6 +1,15 @@
 #pragma once
 #include "Setup.h"
 
+#define create instantiate
+
+template<typename T, typename... Args>
+T* instantiate(Args&&... args) {
+	T* node = new T(std::forward<Args>(args)...);
+	return node;
+}
+
+
 class Node {
 public:
 	Node* parent_ = nullptr;
