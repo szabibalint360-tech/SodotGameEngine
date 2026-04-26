@@ -6,13 +6,13 @@ int main()
     InitWindow(windowWidth,windowHeight,"Platformer");
     SetTargetFPS(60);
     
-    MainScene Main;
+    MainScene* Main = new MainScene();
 
     while (!WindowShouldClose()) {
-        Main.update(GetFrameTime());
+        Main->update(GetFrameTime());
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        Main.draw();
+        Main->draw();
         EndDrawing();
     }
     CloseWindow();

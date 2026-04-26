@@ -134,12 +134,14 @@
   <ItemGroup>
     <ClInclude Include="Architecture\Area.h" />
     <ClInclude Include="Architecture\Bodies.h" />
+    <ClInclude Include="Architecture\Collison.h" />
+    <ClInclude Include="Architecture\SpacialHashGrid.h" />
     <ClInclude Include="Architecture\Node.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Architecture\Scene.h" />
     <ClInclude Include="Architecture\Setup.h" />
     <ClInclude Include="Architecture\Sprite.h" />
-    <ClInclude Include="Architecture\UserInterface.h" />
+    <ClInclude Include="Architecture\UIElements.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Sprites\Idle %2832x32%29.png" />

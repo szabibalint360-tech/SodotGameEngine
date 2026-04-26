@@ -48,43 +48,40 @@ public:
 class MainScene:public Scene {
 public:
 
-	CameraNode* MyCamera = instantiate<CameraNode>();
-    Player* MyPlayer = instantiate<Player>();
+	CameraNode MyCamera;
+    Player MyPlayer;
 
-    Box* Box1 = instantiate<Box>();
-    Box* Box2 = instantiate<Box>();
+    Box Box1;
+    Box Box2;
+    Player playerpool[1000];
     //stress test
 
     MainScene() {//Setup
 
-        MyCamera->setTarget(MyPlayer);
-        camera = MyCamera;
-        addChild(MyCamera);
+        MyCamera.setTarget(&MyPlayer);
+        camera = &MyCamera;
+        addChild(&MyCamera);
         
-        Debugger.setTarget(MyPlayer);
-        MyPlayer->position = { 640.0f,360.0f };
-        addChild(MyPlayer);//Player is child of Scene
+        Debugger.setTarget(&MyPlayer);
+        MyPlayer.position = { 640.0f,360.0f };
+        addChild(&MyPlayer);//Player is child of Scene
 
-        Box1->mode = KINEMATIC;
-        Box2->mode = STATIC;
-        Box1->position = { (float)windowWidth - 200.0f,(float)windowHeight / 2.0f };
-        Box2->position = { 200.0f,400.0f};
-        
-        addChild(Box1);
-        addChild(Box2);
+        Box1.mode = KINEMATIC;
+        Box2.mode = STATIC;
+        Box1.position = { (float)windowWidth - 200.0f,(float)windowHeight / 2.0f };
+        Box2.position = { 200.0f,400.0f};
+        addChild(&Box1);
+        addChild(&Box2);
         
 
-        for (int i = 0; i < 1000;i++) {
-            addChild(instantiate<Player>());
+        for (int i = 0; i < 1000; i++) {
+            addChild(&playerpool[i]);
         }
 	}
     void process(double deltatime) {
-        Box2->position.x++;
-        if (Box2->position.x > windowWidth) {
-            Box2->position.x = 0.0f;
+        Box2.position.x++;
+        if (Box2.position.x > windowWidth) {
+            Box2.position.x = 0.0f;
         }
-    }
-    ~MainScene(){
-         for (auto c : children_) delete c;
     }
 };

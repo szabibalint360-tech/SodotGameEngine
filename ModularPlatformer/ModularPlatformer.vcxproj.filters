@@ -38,10 +38,16 @@
     <ClInclude Include="Architecture\Sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Architecture\UserInterface.h">
+    <ClInclude Include="Architecture\UIElements.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Architecture\Area.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Architecture\SpacialHashGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Architecture\Collison.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

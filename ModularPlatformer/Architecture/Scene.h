@@ -2,7 +2,7 @@
 #include "Area.h"
 #include "Bodies.h"
 #include "Sprite.h"
-#include "UserInterface.h"
+#include "UIElements.h"
 
 class CameraNode : public Node {
 public:
@@ -40,9 +40,11 @@ public:
 class Scene :public Node {
 public:
     CameraNode* camera = nullptr;
+    
     vector <Body*> physics_children_;
     vector <CollisionShape*> physics_children_colshapes;
     vector <Control*> ui_children;// Elements that stay fixed on screen
+    
     DebugOverlay Debugger;
 
     virtual void process(double deltaTime) {}//should be defined in a seperate class
@@ -62,8 +64,11 @@ public:
     }
     virtual void update(double deltaTime) {
         process(deltaTime);
+
+        rebuildGrid();
+
         for (auto child : physics_children_) {
-            child->moveAndSlide(physics_children_colshapes);
+            child->moveAndSlide(grid);
         }
         for (Node* child : children_) {
             child->update(deltaTime);
@@ -98,5 +103,15 @@ public:
             physics_children_.push_back(child);
         }
         physics_children_colshapes.push_back(&(child->Hitbox));//for static bodies we only want their collision shapes
+    }
+
+private:
+    SpatialGrid grid;
+    bool gridDirty = true;
+
+    void rebuildGrid() {
+        grid.clear();
+        for (CollisionShape* shape : physics_children_colshapes)
+            grid.insert(shape);
     }
 };
